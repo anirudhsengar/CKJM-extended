@@ -86,6 +86,10 @@ public class ClassMetrics {
      * Signatures of methods and values of McCabe Cyclomatic Complexity
      */
     private Map<String, Integer> mMapCyclomaticComlpexity;
+
+    private int maxCC = 0;
+    private double avgCC = 0.0;
+
     /**
      * Data Access Metric
      */
@@ -293,26 +297,26 @@ public class ClassMetrics {
      */
     @Override
     public String toString() {
-        return  //TODO: JUnit test is mising.
-                getWmc() +
-                        " " + getDit() +
-                        " " + getNoc() +
-                        " " + getCbo() +
-                        " " + getRfc() +
-                        " " + getLcom() +
-                        " " + getCa() +
-                        " " + getCe() +
-                        " " + getNpm() +
-                        " " + String.format("%.4f", getLcom3()) +
-                        " " + getLoc() +
-                        " " + String.format("%.4f", getDam()) +
-                        " " + getMoa() +
-                        " " + String.format("%.4f", getMfa()) +
-                        " " + String.format("%.4f", getCam()) +
-                        " " + getIc() +
-                        " " + getCbm() +
-                        " " + String.format("%.4f", getAmc()) +
-                        endl + printPlainCC();
+        return (getWmc() + " " + 
+                getDit() + " " + 
+                getNoc() + " " + 
+                getCbo() + " " + 
+                getRfc() + " " + 
+                getLcom() + " " + 
+                getCa() + " " + 
+                getCe() + " " + 
+                getNpm() + " " + 
+                getLcom3() + " " + 
+                getLoc() + " " + 
+                getDam() + " " + 
+                getMoa() + " " + 
+                getMfa() + " " + 
+                getCam() + " " + 
+                getIc() + " " + 
+                getCbm() + " " + 
+                getAmc() + " " + 
+                getMaxCC() + " " +
+                String.format("%.4f", getAvgCC()));
     }
 
     /**
@@ -380,15 +384,40 @@ public class ClassMetrics {
             return i;
     }
 
+    public int getMaxCC() {
+        return maxCC;
+    }
+
+    public double getAvgCC() {
+        return avgCC;
+    }
+
     /**
      * Add method by signature and McCabe Cyclomatic Complexity value
      */
     public void addMethod(String signature, int cc) {
-        if (signature == null)
-            return;
+        mMapCyclomaticComlpexity.put(signature, cc);
+        
+        // Update maximum CC
+        if (cc > maxCC) {
+            maxCC = cc;
+        }
+        
+        // Recalculate average CC
+        calculateAverageCC();
+    }
 
-        signature = signature.split("\n")[0]; //removes throws ExceptionName from the signature
-        mMapCyclomaticComlpexity.put(signature, new Integer(cc));
+    private void calculateAverageCC() {
+        if (mMapCyclomaticComlpexity.isEmpty()) {
+            avgCC = 0.0;
+            return;
+        }
+        
+        int totalCC = 0;
+        for (int cc : mMapCyclomaticComlpexity.values()) {
+            totalCC += cc;
+        }
+        avgCC = (double) totalCC / mMapCyclomaticComlpexity.size();
     }
 
     public double getDam() {

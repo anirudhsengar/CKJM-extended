@@ -25,7 +25,8 @@ The program calculates for each class the following metrics, and displays them o
     IC: Inheritance Coupling (quality oriented extension to C&ampK metric suite)
     CBM: Coupling Between Methods (quality oriented extension to C&ampK metric suite)
     AMC: Average Method Complexity (quality oriented extension to C&ampK metric suite)
-    CC: McCabe's Cyclomatic Complexity
+    MaxCC: Maximum Cyclomatic Complexity
+    AvgCC: Average Cyclomatic Complexity
 
 This program has been initially written as an extended version of ckjm 1.8. 
 It was extended through increasing the number of software metrics that it calculates. 
